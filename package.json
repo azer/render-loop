@@ -1,0 +1,29 @@
+{
+  "name": "render-loop",
+  "version": "0.0.0",
+  "description": "Build HTML/DOM layouts that gets patched automatically with VirtualDOM",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test"
+  },
+  "keywords": [
+    "virtual dom",
+    "html"
+  ],
+  "repository": {
+    "url": "git@github.com:azer/render-loop.git",
+    "type": "git"
+  },
+  "author": "azer",
+  "license": "BSD",
+  "devDependencies": {
+    "debounce-fn": "0.0.0",
+    "prova": "^2.1.2"
+  },
+  "dependencies": {
+    "format-text": "0.0.3",
+    "new-struct": "^0.1.1",
+    "virtual-dom": "^2.0.1",
+    "virtual-html": "^1.3.0"
+  }
+}
