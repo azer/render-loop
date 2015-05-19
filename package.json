@@ -1,6 +1,6 @@
 {
   "name": "render-loop",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Build HTML/DOM layouts that gets patched automatically with VirtualDOM",
   "main": "index.js",
   "scripts": {
