@@ -1,0 +1,71 @@
+h1 {
+  text-align: center;
+  color: rgb(0, 120, 100);
+}
+
+h3 {
+  text-align: center;
+  font: 16px Times, serif;
+}
+
+h3 span {
+  color: rgb(0, 0, 50);
+  font-weight: bold;
+  padding-right: 5px;
+}
+
+.grid {
+  width: 1300px;
+  margin: 20px auto;
+  font: 14px Arial, sans-serif;
+}
+
+.captions {
+  background: rgb(20, 190, 200);
+  color: #fff;
+  font-weight: bold;
+  padding: 10px 2px;
+  border-bottom: 1px solid rgb(20, 120, 150);
+  font: 18px Times, serif;
+}
+
+.column {
+  width: 100px;
+  float: left;
+  text-align: center;
+}
+
+.row .column {
+  color: #333;
+}
+
+.row {
+  padding: 10px 0;
+  height: 50px;
+}
+
+.row:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+
+.row.highlighted {
+  background: yellow;
+}
+
+.hobbies {
+  width: 500px;
+  text-align: justify;
+}
+
+.village {
+  width: 200px;
+}
+
+.income {
+  width: 150px;
+}
+
+.clear {
+  clear: both;
+}

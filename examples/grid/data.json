@@ -1,0 +1,102 @@
+[
+	{
+		"id": 318723863,
+		"name": "Alani",
+		"surname": "NAUNG",
+		"income": 99,
+		"tribe": "TU",
+		"village": "Saonari",
+		"hobbies": "Manjou laut manjou manukkun kue marmeam karejo undefined tinggal tinggal",
+		"css-classes": ""
+	},
+	{
+		"id": 504859864,
+		"name": "Pangototoi",
+		"surname": "HAGOGO",
+		"income": 53,
+		"tribe": "MAMBOAN",
+		"village": "Ucok",
+		"hobbies": "Laut talenta manuhor tibbo mangirim mok-mok dongan nattoari mangajari taon",
+		"css-classes": ""
+	},
+	{
+		"id": 333979329,
+		"name": "Porsea",
+		"surname": "KODE",
+		"income": 79,
+		"tribe": "MANGALOPPA",
+		"village": "Godang",
+		"hobbies": "Umma hamagoan bagian onom mamereng, mangida sappulu sada alogo mangalehon parekelan luat",
+		"css-classes": ""
+	},
+	{
+		"id": 945467954,
+		"name": "Sahali",
+		"surname": "ONOM",
+		"income": 120,
+		"tribe": "MALAS",
+		"village": "Neang",
+		"hobbies": "Mambayar mamboto, huboto dame asin debata mangummahon tondong, ‘mar’ + verb root manjual inganan",
+		"css-classes": ""
+	},
+	{
+		"id": 806595087,
+		"name": "Barani",
+		"surname": "NDANG",
+		"income": 41,
+		"tribe": "MANOGOT",
+		"village": "Ndang",
+		"hobbies": "Oldora bagak mirdong mauas abu mabiar sipikkiran manjumpangi tao dohot",
+		"css-classes": ""
+	},
+	{
+		"id": 554084198,
+		"name": "Las",
+		"surname": "KESEMPATAN",
+		"income": 119,
+		"tribe": "NASOHONA",
+		"village": "Godang",
+		"hobbies": "Agama panatapan lelenghian radio ulani, alani tinggal patwolo bagas pistar sattabi, parmisi",
+		"css-classes": ""
+	},
+	{
+		"id": 88645254,
+		"name": "Sarupa",
+		"surname": "MAMBAYAR",
+		"income": 93,
+		"tribe": "MAMULAI",
+		"village": "Tinggal",
+		"hobbies": "Parmisi/santabi alani aha ibana dalan robber/theif sega, malengleng holan taritu manukkun segar tuho",
+		"css-classes": ""
+	},
+	{
+		"id": 514241438,
+		"name": "Lorus",
+		"surname": "MENGKEL",
+		"income": 93,
+		"tribe": "ARTA",
+		"village": "Kode",
+		"hobbies": "Marsahit parubat piga-piga sewa/paneimpang piga-piga halak paspor imbaru barita laho modom satokkin (very short amount of time)",
+		"css-classes": ""
+	},
+	{
+		"id": 15588491,
+		"name": "Ototo",
+		"surname": "SADIA",
+		"income": 109,
+		"tribe": "NDANG",
+		"village": "Las",
+		"hobbies": "Sude, sudena maila piga leleng holan manurat ibana borat denggan pinahan halakna-asing",
+		"css-classes": ""
+	},
+	{
+		"id": 948497704,
+		"name": "Ende",
+		"surname": "BOKNI",
+		"income": 110,
+		"tribe": "MARBOLO",
+		"village": "Mangajari",
+		"hobbies": "Martondong bon, faktor mangolu ari siamun sega, malengleng sappulu dua tunggani doli taon tinggal",
+		"css-classes": ""
+	}
+]
