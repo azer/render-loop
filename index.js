@@ -5,6 +5,7 @@ var createElement = require("virtual-dom/create-element");
 var diff = require("virtual-dom/diff");
 var writePatches = require("virtual-dom/patch");
 var virtualHTML = require("virtual-html");
+var isNode = require("is-node");
 
 var patch = debounce(applyPatches, 10);
 
@@ -31,10 +32,12 @@ function NewRenderLoop (template, options) {
   }
 
   return RenderLoop({
+    browser: !isNode,
     clean: false,
     context: options.context || {},
     isReady: false,
     isRenderLoop: true,
+    node: isNode,
     updateFn: updateFn,
     template: template
   });
@@ -140,7 +143,7 @@ function set (loop, key, value) {
 
   if (arguments.length == 3) {
     loop.context[key] = adjustContext(value);
-    patch(loop);
+    if (!isNode) patch(loop);
     return value;
   }
 
@@ -153,7 +156,7 @@ function set (loop, key, value) {
     loop.context[key] = adjustContext(options[key]);
   }
 
-  patch(loop);
+  if (!isNode) patch(loop);
 
   return loop.context;
 }
