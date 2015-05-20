@@ -47,6 +47,6 @@ var html = {
 }
 
 var loop = RenderLoop(html.fruits, function () {
-  loop.set('fruits', loop.map(html.fruit, prices));
+  loop.set('fruits', loop.each(html.fruit, prices));
 })
 ```

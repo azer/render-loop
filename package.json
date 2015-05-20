@@ -17,9 +17,11 @@
   "author": "azer",
   "license": "BSD",
   "devDependencies": {
+    "brfs": "^1.4.0",
     "format-date": "0.0.1",
     "just-a-browserify-server": "0.0.4",
-    "prova": "^2.1.2"
+    "prova": "^2.1.2",
+    "toba-batak-dictionary": "0.0.0"
   },
   "dependencies": {
     "debounce-fn": "0.0.0",

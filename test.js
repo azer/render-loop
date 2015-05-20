@@ -58,7 +58,7 @@ test('hook a loop with already existing DOM', function (t) {
   });
 });
 
-test('a simple list layout using the map method', function (t) {
+test('a simple list layout using the each method', function (t) {
   t.plan(3);
 
   var prices = [
@@ -72,7 +72,7 @@ test('a simple list layout using the map method', function (t) {
   };
 
   var loop = RenderLoop(templates.fruits, function () {
-    loop.set('fruits', loop.fruits = loop.map(templates.fruit, prices));
+    loop.set('fruits', loop.fruits = loop.each(templates.fruit, prices));
   });
 
   loop.insert(document.body);
@@ -95,7 +95,7 @@ test('a simple list layout using the map method', function (t) {
       price: '$4.59/lb'
     });
 
-    loop.set('fruits', loop.fruits = loop.map(templates.fruit, prices));
+    loop.set('fruits', loop.fruits = loop.each(templates.fruit, prices));
 
     and(function () {
       t.equal(html(), '<ul><li>melon: $1.99/lb</li>\n<li>orange (discount): $0.49/lb</li>\n<li>grapes: $4.59/lb</li></ul>');

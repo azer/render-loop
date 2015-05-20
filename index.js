@@ -10,13 +10,13 @@ var isNode = require("is-node");
 var patch = debounce(applyPatches, 10);
 
 var RenderLoop = struct({
+  each: each,
   get: get,
   hook: hook,
   html: html,
   insert: insert,
   render: render,
-  set: set,
-  map: map
+  set: set
 });
 
 module.exports = NewRenderLoop;
@@ -37,20 +37,50 @@ function NewRenderLoop (template, options) {
     context: options.context || {},
     isReady: false,
     isRenderLoop: true,
+    locked: options.locked || false,
     node: isNode,
+    parent: options.parent,
     updateFn: updateFn,
     template: template
   });
 }
 
 function applyPatches (loop) {
+  if (loop.locked) return;
+
   var vdom = virtualHTML(loop.html());
   var patches = diff(loop.vdom, vdom);
 
   writePatches(element(loop), patches);
 
   loop.vdom = vdom;
+
+  if (loop.parent) resetDOM(loop.parent);
 }
+
+function each (loop, template, id, context) {
+  if (arguments.length == 3) {
+    context = id;
+    id = ':root';
+  }
+
+  var i = context.length;
+  var partials = [];
+
+  while (i--) {
+    partials[i] = NewRenderLoop(template, {
+      parent: loop,
+      locked: true,
+      context: context[i]
+    });
+  }
+
+  !loop.partials && (loop.partials = {});
+  loop.partials[id] = partials;
+
+  return partials;
+}
+
 
 function get (loop, key) {
   return loop.context[key];
@@ -62,25 +92,7 @@ function element (loop) {
   loop.vdom = virtualHTML(loop.html());
   loop._element = createElement(loop.vdom);
 
-  if (!loop.partials) return loop._element;
-
-  var selector;
-  var parent;
-  var i;
-  for (selector in loop.partials) {
-    if (selector == ':root') {
-      parent = loop._element;
-    } else {
-      parent = loop._element.querySelector(selector);
-    }
-
-    if (!parent) throw new Error('Can not hook partials with given selector "' + selector + '" that has no matching elements.');
-
-    i = loop.partials[selector].length;
-    while (i--) {
-      loop.partials[selector][i].hook(parent.children[i]);
-    }
-  }
+  loop.partials && hookPartials(loop);
 
   return loop._element;
 }
@@ -93,6 +105,8 @@ function hook (loop, element) {
   var patches = diff(loop.vdom, vdom);
 
   writePatches(loop._element, patches);
+
+  loop.partials && hookPartials(loop);
 }
 
 function html (loop) {
@@ -109,25 +123,6 @@ function html (loop) {
 
 function insert (loop, parent) {
   parent.appendChild(element(loop));
-}
-
-function map (loop, template, id, context) {
-  if (arguments.length == 3) {
-    context = id;
-    id = ':root';
-  }
-
-  var i = context.length;
-  var partials = [];
-
-  while (i--) {
-    partials[i] = NewRenderLoop(template, { context: context[i] });
-  }
-
-  !loop.partials && (loop.partials = {});
-  loop.partials[id] = partials;
-
-  return partials;
 }
 
 function remove (loop) {
@@ -156,9 +151,37 @@ function set (loop, key, value) {
     loop.context[key] = adjustContext(options[key]);
   }
 
+  console.log(options);
+
   if (!isNode) patch(loop);
 
   return loop.context;
+}
+
+function hookPartials (loop) {
+  var selector;
+  var parent;
+  var i;
+  for (selector in loop.partials) {
+    if (selector == ':root') {
+      parent = loop._element;
+    } else {
+      parent = loop._element.querySelector(selector);
+    }
+
+    if (!parent) throw new Error('Can not hook partials with given selector "' + selector + '" that has no matching elements.');
+
+    i = loop.partials[selector].length;
+    while (i--) {
+      loop.partials[selector][i].hook(parent.children[i]);
+      loop.partials[selector][i].locked = false;
+    }
+  }
+}
+
+function resetDOM (loop) {
+  loop._html = loop._element.outerHTML;
+  loop.vdom = virtualHTML(loop.html());
 }
 
 function adjustContext (value) {
