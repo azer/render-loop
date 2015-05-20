@@ -15,8 +15,8 @@ A simple greeting layout:
 ```js
 var RenderLoop = require('render-loop')
 
-var loop = RenderLoop('<h1>{message}, {name}</h1>', function (view) {
-  view.set({
+var loop = RenderLoop('<h1>{message}, {name}</h1>', function () {
+  loop.set({
     message: 'good morning',
     name: 'azer'
   })
