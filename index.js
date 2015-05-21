@@ -7,8 +7,6 @@ var writePatches = require("virtual-dom/patch");
 var virtualHTML = require("virtual-html");
 var isNode = require("is-node");
 
-var patch = debounce(applyPatches, 10);
-
 var RenderLoop = struct({
   each: each,
   get: get,
@@ -31,7 +29,7 @@ function NewRenderLoop (template, options) {
     updateFn = options.updateFn;
   }
 
-  return RenderLoop({
+  var loop = RenderLoop({
     browser: !isNode,
     clean: false,
     context: options.context || {},
@@ -43,19 +41,12 @@ function NewRenderLoop (template, options) {
     updateFn: updateFn,
     template: template
   });
-}
 
-function applyPatches (loop) {
-  if (loop.locked) return;
+  loop.patch = debounce(function (callback) {
+    applyPatches(loop, callback);
+  }, 10);
 
-  var vdom = virtualHTML(loop.html());
-  var patches = diff(loop.vdom, vdom);
-
-  writePatches(element(loop), patches);
-
-  loop.vdom = vdom;
-
-  if (loop.parent) resetDOM(loop.parent);
+  return loop;
 }
 
 function each (loop, template, id, context) {
@@ -99,10 +90,10 @@ function element (loop) {
 
 function hook (loop, element) {
   loop._element = element;
-  loop.vdom = virtualHTML(element.outerHTML);
+  loop._html = element.outerHTML;
 
-  var vdom = virtualHTML(loop.html());
-  var patches = diff(loop.vdom, vdom);
+  loop.vdom = generateVDOM(loop);
+  var patches = diff(virtualHTML(element.outerHTML), loop.vdom);
 
   writePatches(loop._element, patches);
 
@@ -114,7 +105,9 @@ function html (loop) {
 
   if (!loop.isReady && loop.updateFn) loop.updateFn(loop);
 
-  loop._html = loop.render();
+  var html = loop.render();
+
+  loop._html = html;
   loop.clean = true;
   loop.isReady = true;
 
@@ -138,7 +131,13 @@ function set (loop, key, value) {
 
   if (arguments.length == 3) {
     loop.context[key] = adjustContext(value);
-    if (!isNode) patch(loop);
+
+    if (!isNode) {
+      loop.patch(function () {
+        hookPartials(loop);
+      });
+    }
+
     return value;
   }
 
@@ -151,38 +150,16 @@ function set (loop, key, value) {
     loop.context[key] = adjustContext(options[key]);
   }
 
-  console.log(options);
-
-  if (!isNode) patch(loop);
+  if (!isNode) {
+    loop.patch(function () {
+      hookPartials(loop);
+    });
+  }
 
   return loop.context;
 }
 
-function hookPartials (loop) {
-  var selector;
-  var parent;
-  var i;
-  for (selector in loop.partials) {
-    if (selector == ':root') {
-      parent = loop._element;
-    } else {
-      parent = loop._element.querySelector(selector);
-    }
-
-    if (!parent) throw new Error('Can not hook partials with given selector "' + selector + '" that has no matching elements.');
-
-    i = loop.partials[selector].length;
-    while (i--) {
-      loop.partials[selector][i].hook(parent.children[i]);
-      loop.partials[selector][i].locked = false;
-    }
-  }
-}
-
-function resetDOM (loop) {
-  loop._html = loop._element.outerHTML;
-  loop.vdom = virtualHTML(loop.html());
-}
+// static functions
 
 function adjustContext (value) {
   if (!Array.isArray(value)) return value;
@@ -200,4 +177,48 @@ function adjustContext (value) {
   }
 
   return mirror.join('\n');
+}
+
+function applyPatches (loop, callback) {
+  if (loop.locked) return;
+
+  var vdom = generateVDOM(loop);
+  var patches = diff(loop.vdom, vdom);
+
+  writePatches(element(loop), patches);
+
+  loop.vdom = vdom;
+
+  callback && callback();
+}
+
+function generateVDOM (loop) {
+  return virtualHTML(loop.html());
+}
+
+function hookPartials (loop) {
+  var selector;
+  var parent;
+  var i;
+  for (selector in loop.partials) {
+    if (selector == ':root') {
+      parent = loop._element;
+    } else {
+      parent = loop._element.querySelector(selector);
+    }
+
+    if (!parent) throw new Error('Can not hook partials with given selector "' + selector + '" that has no matching elements.');
+
+    i = loop.partials[selector].length;
+
+    while (i--) {
+      if (parent.children[i]) {
+        loop.partials[selector][i].hook(parent.children[i]);
+      } else {
+        loop.partials[selector][i].insert(parent);
+      }
+
+      loop.partials[selector][i].locked = false;
+    }
+  }
 }

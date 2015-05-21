@@ -59,7 +59,7 @@ test('hook a loop with already existing DOM', function (t) {
 });
 
 test('a simple list layout using the each method', function (t) {
-  t.plan(3);
+  t.plan(4);
 
   var prices = [
     { name: 'melon', price: '$3.99/lb' },
@@ -99,6 +99,13 @@ test('a simple list layout using the each method', function (t) {
 
     and(function () {
       t.equal(html(), '<ul><li>melon: $1.99/lb</li>\n<li>orange (discount): $0.49/lb</li>\n<li>grapes: $4.59/lb</li></ul>');
+
+      loop.fruits[0].set('name', 'watermelon');
+      loop.fruits[2].set('price', '$4.99/lb');
+
+      and(function () {
+        t.equal(html(), '<ul><li>watermelon: $1.99/lb</li>\n<li>orange (discount): $0.49/lb</li>\n<li>grapes: $4.99/lb</li></ul>');
+      });
     });
   });
 });
