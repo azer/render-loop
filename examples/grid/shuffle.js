@@ -4,7 +4,7 @@ var ctr = 0;
 module.exports = shuffle;
 
 function shuffle (grid) {
-  var i = 1;
+  var i = 100;
   var index;
   var row;
 
@@ -18,7 +18,7 @@ function shuffle (grid) {
     grid.set('total-update', ++ctr);
   }
 
-  setTimeout(shuffle, 1000, grid);
+  setTimeout(shuffle, 10, grid);
 }
 
 function flash (row) {
